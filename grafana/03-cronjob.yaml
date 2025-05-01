@@ -1,0 +1,41 @@
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: grafana-backup
+  namespace: monitoring
+spec:
+  schedule: "0 15 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: grafana-backup
+            image: busybox
+            imagePullPolicy: IfNotPresent
+            command:
+            - /bin/sh
+            - -c
+            - |
+              set -e
+              echo "Starting backup at $(date)"
+              cp /var/lib/grafana/grafana.db /backup/grafana-$(date +%Y%m%d%H%M%S).db
+              echo "Backup completed at $(date)"
+
+              echo "Removing backups older than 3 days"
+              find /backup -maxdepth 1 -mtime +3 -type f -delete
+            volumeMounts:
+            - name: nfs-grafana-backup
+              mountPath: /backup
+            - name: grafana-var-lib
+              mountPath: /var/lib/grafana
+          restartPolicy: OnFailure
+          volumes:
+          - name: grafana-var-lib
+            nfs:
+              server: ${NFS_SERVER}
+              path: /volume1/kubernetes/config/grafana
+          - name: nfs-grafana-backup
+            nfs:
+              server: ${NFS_SERVER}
+              path: /volume1/kubernetes/backup/grafana

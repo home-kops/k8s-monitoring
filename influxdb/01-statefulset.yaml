@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: influxdb
+  namespace: monitoring
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: influxdb
+  serviceName: influxdb
+  template:
+    metadata:
+      labels:
+        app: influxdb
+    spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+      containers:
+      - image: influxdb:2.7.11-alpine
+        name: influxdb
+        ports:
+        - containerPort: 8086
+          name: influxdb
+        volumeMounts:
+        - name: data
+          mountPath: /var/lib/influxdb2
+      volumes:
+      - name: data
+        nfs:
+          server: ${NFS_SERVER}
+          path: /volume1/data/monitoring/influxdb
