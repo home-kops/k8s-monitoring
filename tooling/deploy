@@ -18,7 +18,8 @@ while getopts "d" flag; do
 done
 
 # Add helm repositories
-helm repo add grafana https://grafana.github.io/helm-charts && \
+helm repo add influxdata https://helm.influxdata.com/ && \
+    helm repo add grafana https://grafana.github.io/helm-charts && \
     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts && \
     helm repo update
 
@@ -35,11 +36,17 @@ echo -e "\nDeploying Influxdb..."
 influxdb_dir="${project_path}/influxdb"
 
 # Replace env variables
-envsubst <"${influxdb_dir}"/02-statefulset.yaml | sponge "${influxdb_dir}"/02-statefulset.yaml
-envsubst <"${influxdb_dir}"/04-ingress-route.yaml | sponge "${influxdb_dir}"/04-ingress-route.yaml
-envsubst <"${influxdb_dir}"/05-cronjob.yaml | sponge "${influxdb_dir}"/05-cronjob.yaml
+envsubst <"${influxdb_dir}"/02-cronjob.yaml | sponge "${influxdb_dir}"/02-cronjob.yaml
+envsubst '${DOMAIN}' <"${influxdb_dir}"/values.yaml | sponge "${influxdb_dir}"/values.yaml
 
 kubectl apply -f "${influxdb_dir}" --dry-run="${dry_run_mode}"
+
+if [[ "${dry_run_mode}" == "server" ]]; then
+    helm upgrade influxdb influxdata/influxdb2 --install --namespace monitoring --values "${influxdb_dir}"/values.yaml --dry-run="server"
+else
+    helm upgrade influxdb influxdata/influxdb2 --install --namespace monitoring --values "${influxdb_dir}"/values.yaml
+fi
+
 echo -e "Done!\n"
 
 # Telegraf nfs1

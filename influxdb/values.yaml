@@ -5,7 +5,7 @@ env:
 - name: INFLUXDB_ORG
   valueFrom:
     secretKeyRef:
-      name: my-secret
+      name: influxdb-secrets
       key: org
 - name: INFLUXDB_OPERATOR_PASSWORD
   valueFrom:
