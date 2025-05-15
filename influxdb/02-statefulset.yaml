@@ -23,7 +23,7 @@ spec:
         lifecycle:
           postStart:
             exec:
-              command: ["/bin/bash", "/scripts/init.sh"]
+              command: ["/bin/bash", "/scripts/init.sh > /tmp/init.log 2>&1"]
         ports:
         - containerPort: 8086
           name: influxdb
@@ -51,6 +51,7 @@ spec:
           mountPath: /var/lib/influxdb2
         - name: backup
           mountPath: /mnt/backup
+          readOnly: true
         - name: init
           mountPath: /scripts
           readOnly: true
