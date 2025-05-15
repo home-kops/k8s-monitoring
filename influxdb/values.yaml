@@ -1,0 +1,37 @@
+image:
+  repository: influxdb
+  tag: 2.7.11-alpine
+env:
+- name: INFLUXDB_ORG
+  valueFrom:
+    secretKeyRef:
+      name: my-secret
+      key: org
+- name: INFLUXDB_OPERATOR_PASSWORD
+  valueFrom:
+    secretKeyRef:
+      name: influxdb-secrets
+      key: operator-password
+- name: INFLUXDB_OPERATOR_TOKEN
+  valueFrom:
+    secretKeyRef:
+      name: influxdb-secrets
+      key: operator-token
+adminUser:
+  organization: "${INFLUXDB_ORG}"
+  bucket: "default"
+  user: "admin"
+  password: "${INFLUXDB_OPERATOR_PASSWORD}"
+  token: "${INFLUXDB_OPERATOR_TOKEN}"
+persistence:
+  enabled: true
+  useExisting: true
+  name: influxdb-data
+  mountPath: /var/lib/influxdb2
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  hosts:
+  - influxdb.${DOMAIN}
