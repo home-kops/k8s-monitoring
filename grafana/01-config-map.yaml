@@ -29,7 +29,7 @@ data:
       jsonData:
         version: Flux
         organization: "krieg"
-        defaultBucket: "telegraf-metrics"
+        defaultBucket: "default"
       secureJsonData:
         token: "${GF_DATASOURCE_INFLUXDB_TOKEN}"
 ---
