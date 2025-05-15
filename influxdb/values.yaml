@@ -19,5 +19,4 @@ ingress:
   ingressClassName: traefik
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
-  hosts:
-  - influxdb.${DOMAIN}
+  hostname: influxdb.${DOMAIN}
