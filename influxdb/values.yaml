@@ -5,10 +5,11 @@ env:
 - name: INFLUXDB_ORG
   valueFrom:
     secretKeyRef:
-      name: influxdb-auth
+      name: influxdb-secrets
       key: org
 adminUser:
   organization: "${INFLUXDB_ORG}"
+  existingSecret: influxdb-secrets
 persistence:
   enabled: true
   useExisting: true
