@@ -1,0 +1,16 @@
+apiVersion: traefik.io/v1alpha1
+kind: IngressRoute
+metadata:
+  name: influxdb-ingress
+  namespace: monitoring
+spec:
+  entryPoints:
+  - websecure
+  - web
+  routes:
+  - match: Host(`influxdb.${DOMAIN}`)
+    kind: Rule
+    services:
+    - kind: Service
+      name: influxdb-service
+      port: influxdb

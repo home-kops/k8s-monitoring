@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-config
+  namespace: monitoring
+data:
+  GF_SERVER_ROOT_URL: "https://grafana.${DOMAIN}"
+  GF_AUTH_GENERIC_OAUTH_ENABLED: "true"
+  GF_AUTH_GENERIC_OAUTH_NAME: "authentik"
+  GF_AUTH_GENERIC_OAUTH_SCOPES: "openid profile email"
+  GF_AUTH_GENERIC_OAUTH_AUTH_URL: "https://authentik.${DOMAIN}/application/o/authorize/"
+  GF_AUTH_GENERIC_OAUTH_TOKEN_URL: "https://authentik.${DOMAIN}/application/o/token/"
+  GF_AUTH_GENERIC_OAUTH_API_URL: "https://authentik.${DOMAIN}/application/o/userinfo/"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-datasources
+  namespace: monitoring
+data:
+  influxdb.yaml: |
+    apiVersion: 1
+    datasources:
+    - name: InfluxDB
+      type: influxdb
+      access: proxy
+      url: https://influxdb.${DOMAIN}
+      uid: "P951FEA4DE68E13C5"
+      jsonData:
+        version: Flux
+        organization: "krieg"
+        defaultBucket: "telegraf-metrics"
+      secureJsonData:
+        token: "${GF_DATASOURCE_INFLUXDB_TOKEN}"
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: grafana-dashboard-provider
+  namespace: monitoring
+data:
+  dashboards.yaml: |
+    apiVersion: 1
+    providers:
+    - name: 'default'
+      orgId: 1
+      folder: ''
+      type: file
+      disableDeletion: false
+      options:
+        path: /var/lib/grafana/dashboards

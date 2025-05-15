@@ -1,0 +1,112 @@
+#!/bin/bash
+
+set -eu
+
+dry_run_mode="none"
+
+while getopts "d" flag; do
+    case $flag in
+    d)
+        echo "Running dry-run mode..."
+        dry_run_mode="server"
+        ;;
+    \?)
+        echo "Wrong argument"
+        exit 1
+        ;;
+    esac
+done
+
+# Add helm repositories
+helm repo add grafana https://grafana.github.io/helm-charts && \
+    helm repo add prometheus-community https://prometheus-community.github.io/helm-charts && \
+    helm repo update
+
+project_path="$(git rev-parse --show-toplevel)"
+
+# Deploy namespace
+kubectl apply -f "${project_path}"/common/00-namespace.yaml
+
+# Deploy common resources
+kubectl apply -f "${project_path}"/common --dry-run="${dry_run_mode}"
+
+# Influxdb
+echo -e "\nDeploying Influxdb..."
+influxdb_dir="${project_path}/influxdb"
+
+# Replace env variables
+envsubst <"${influxdb_dir}"/02-statefulset.yaml | sponge "${influxdb_dir}"/02-statefulset.yaml
+envsubst <"${influxdb_dir}"/04-ingress-route.yaml | sponge "${influxdb_dir}"/04-ingress-route.yaml
+envsubst <"${influxdb_dir}"/05-cronjob.yaml | sponge "${influxdb_dir}"/05-cronjob.yaml
+
+kubectl apply -f "${influxdb_dir}" --dry-run="${dry_run_mode}"
+echo -e "Done!\n"
+
+# Telegraf nfs1
+echo -e "\nDeploying Telegraf for NFS1..."
+telegraf_nfs1_dir="${project_path}/telegraf-nfs1"
+
+# Replace env variables
+envsubst '$DOMAIN' <"${telegraf_nfs1_dir}"/01-config-map.yaml | sponge "${telegraf_nfs1_dir}"/01-config-map.yaml
+
+kubectl apply -f "${telegraf_nfs1_dir}" --dry-run="${dry_run_mode}"
+echo -e "Done!\n"
+
+# Prometheus
+echo -e "\nDeploying Prometheus..."
+prometheus_dir="${project_path}/prometheus"
+
+# Replace env variables
+envsubst <"${prometheus_dir}"/values.yaml | sponge "${prometheus_dir}"/values.yaml
+
+if [[ "${dry_run_mode}" == "server" ]]; then
+    helm upgrade prometheus prometheus-community/prometheus --install --namespace monitoring --values "${prometheus_dir}"/values.yaml --dry-run="server"
+else
+    helm upgrade prometheus prometheus-community/prometheus --install --namespace monitoring --values "${prometheus_dir}"/values.yaml
+fi
+
+echo -e "Done!\n"
+
+# Grafana
+echo -e "\nDeploying Grafana..."
+grafana_dir="${project_path}/grafana"
+
+# Replace env variables
+envsubst '${DOMAIN}' <"${grafana_dir}"/01-config-map.yaml | sponge "${grafana_dir}"/01-config-map.yaml
+envsubst <"${grafana_dir}"/04-ingress-route.yaml | sponge "${grafana_dir}"/04-ingress-route.yaml
+
+kubectl -n monitoring delete configmap grafana-dashboards --ignore-not-found=true
+kubectl -n monitoring create configmap grafana-dashboards --from-file="${grafana_dir}"/dashboards --dry-run="${dry_run_mode}"
+
+kubectl apply -f "${grafana_dir}" --dry-run="${dry_run_mode}"
+echo -e "Done!\n"
+
+# Loki
+echo -e "\nDeploying Loki..."
+loki_dir="${project_path}/loki"
+
+# Replace env variables
+envsubst <"${loki_dir}"/values.yaml | sponge "${loki_dir}"/values.yaml
+
+if [[ "${dry_run_mode}" == "server" ]]; then
+    helm upgrade loki grafana/loki --install --namespace monitoring --values "${loki_dir}"/values.yaml --dry-run="server"
+else
+    helm upgrade loki grafana/loki --install --namespace monitoring --values "${loki_dir}"/values.yaml
+fi
+
+echo -e "Done!\n"
+
+# Alloy
+echo -e "\nDeploying Alloy..."
+alloy_dir="${project_path}/alloy"
+
+# Replace env variables
+envsubst <"${alloy_dir}"/values.yaml | sponge "${alloy_dir}"/values.yaml
+
+if [[ "${dry_run_mode}" == "server" ]]; then
+    helm upgrade alloy grafana/alloy --install --namespace monitoring --values "${alloy_dir}"/values.yaml --dry-run="server"
+else
+    helm upgrade alloy grafana/alloy --install --namespace monitoring --values "${alloy_dir}"/values.yaml
+fi
+
+echo -e "Done!\n"
