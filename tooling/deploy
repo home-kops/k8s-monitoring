@@ -39,13 +39,15 @@ influxdb_dir="${project_path}/influxdb"
 envsubst <"${influxdb_dir}"/02-cronjob.yaml | sponge "${influxdb_dir}"/02-cronjob.yaml
 envsubst '${DOMAIN}' <"${influxdb_dir}"/values.yaml | sponge "${influxdb_dir}"/values.yaml
 
-kubectl apply -f "${influxdb_dir}" --dry-run="${dry_run_mode}"
+kubectl apply -f "${influxdb_dir}"/00-secret.yaml,"${influxdb_dir}"/01-pvc.yaml --dry-run="${dry_run_mode}"
 
 if [[ "${dry_run_mode}" == "server" ]]; then
     helm upgrade influxdb influxdata/influxdb2 --install --namespace monitoring --values "${influxdb_dir}"/values.yaml --dry-run="server"
 else
     helm upgrade influxdb influxdata/influxdb2 --install --namespace monitoring --values "${influxdb_dir}"/values.yaml
 fi
+
+kubectl apply -f "${influxdb_dir}"/02-cronjob.yaml --dry-run="${dry_run_mode}"
 
 echo -e "Done!\n"
 

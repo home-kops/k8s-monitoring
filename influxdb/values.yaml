@@ -5,24 +5,10 @@ env:
 - name: INFLUXDB_ORG
   valueFrom:
     secretKeyRef:
-      name: influxdb-secrets
+      name: influxdb-auth
       key: org
-- name: INFLUXDB_OPERATOR_PASSWORD
-  valueFrom:
-    secretKeyRef:
-      name: influxdb-secrets
-      key: operator-password
-- name: INFLUXDB_OPERATOR_TOKEN
-  valueFrom:
-    secretKeyRef:
-      name: influxdb-secrets
-      key: operator-token
 adminUser:
   organization: "${INFLUXDB_ORG}"
-  bucket: "default"
-  user: "admin"
-  password: "${INFLUXDB_OPERATOR_PASSWORD}"
-  token: "${INFLUXDB_OPERATOR_TOKEN}"
 persistence:
   enabled: true
   useExisting: true
