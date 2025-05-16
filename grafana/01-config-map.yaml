@@ -32,6 +32,21 @@ data:
         defaultBucket: "default"
       secureJsonData:
         token: "${GF_DATASOURCE_INFLUXDB_TOKEN}"
+  prometheus.yaml: |
+    apiVersion: 1
+    datasources:
+    - name: Prometheus
+      type: prometheus
+      access: proxy
+      url: http://prometheus.${DOMAIN}:9090
+      uid: "jYEsy1N7SeRYiRLUj"
+      jsonData:
+        httpMethod: POST
+        manageAlerts: true
+        prometheusType: Prometheus
+        prometheusVersion: 2.44.0
+        cacheLevel: 'Low'
+        disableRecordingRules: false
 ---
 apiVersion: v1
 kind: ConfigMap
