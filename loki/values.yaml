@@ -3,10 +3,6 @@ loki:
     replication_factor: 1
   storage:
     type: filesystem
-  storageConfig:
-    filesystem:
-      chunks_directory: /mnt/nfs/loki/chunks
-      rules_directory: /mnt/nfs/loki/rules
   schemaConfig:
     configs:
     - from: 2024-01-01
@@ -23,16 +19,6 @@ loki:
     volume_enabled: true
   ruler:
     enable_api: true
-
-extraVolumes:
-  - name: loki-nfs-volume
-    nfs:
-      server: ${NFS_SERVER}
-      path: /volume1/data/monitoring/loki
-
-extraVolumeMounts:
-  - name: loki-nfs-volume
-    mountPath: /mnt/nfs/loki
 
 gateway:
   enabled: false

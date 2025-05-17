@@ -21,7 +21,7 @@ data:
   influxdb.yaml: |
     apiVersion: 1
     datasources:
-    - name: InfluxDB
+    - name: influxdb
       type: influxdb
       access: proxy
       url: https://influxdb.${DOMAIN}
@@ -35,7 +35,7 @@ data:
   prometheus.yaml: |
     apiVersion: 1
     datasources:
-    - name: Prometheus
+    - name: prometheus
       type: prometheus
       access: proxy
       url: http://prometheus.${DOMAIN}:9090
@@ -47,6 +47,17 @@ data:
         prometheusVersion: 2.44.0
         cacheLevel: 'Low'
         disableRecordingRules: false
+  loki.yaml: |
+    apiVersion: 1
+    datasources:
+    - name: loki
+      type: loki
+      access: proxy
+      url: http://loki.${DOMAIN}:3100
+      orgId: 1
+      uid: "61nfXLoLSDBbLek8D"
+      basicAuth: false
+      version: 1
 ---
 apiVersion: v1
 kind: ConfigMap
