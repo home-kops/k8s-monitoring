@@ -19,7 +19,7 @@ spec:
             - |
               set -e
               echo "Starting backup at $(date)"
-              influx backup /mnt/backup/influxdb-$(date +%Y%m%d%H%M%S) --token "${INFLUXDB_OPERATOR_TOKEN}"
+              influx backup /mnt/backup/influxdb-$(date +%Y%m%d%H%M%S) --host https://influxdb.${DOMAIN} --token "${INFLUXDB_OPERATOR_TOKEN}"
               echo "Backup completed at $(date)"
 
               echo "Removing backups older than 3 days..."
@@ -31,15 +31,10 @@ spec:
                   name: influxdb-secrets
                   key: admin-token
             volumeMounts:
-            - name: data
-              mountPath: /var/lib/influxdb2
             - name: backup
               mountPath: /mnt/backup
           restartPolicy: OnFailure
           volumes:
-          - name: data
-            persistentVolumeClaim:
-              claimName: influxdb-data
           - name: backup
             nfs:
               server: ${NFS_SERVER}
