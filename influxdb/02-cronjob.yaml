@@ -29,7 +29,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: influxdb-secrets
-                  key: operator-token
+                  key: admin-token
             volumeMounts:
             - name: data
               mountPath: /var/lib/influxdb2
