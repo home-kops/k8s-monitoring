@@ -31,10 +31,15 @@ spec:
                   name: influxdb-secrets
                   key: operator-token
             volumeMounts:
+            - name: data
+              mountPath: /var/lib/influxdb2
             - name: backup
               mountPath: /mnt/backup
           restartPolicy: OnFailure
           volumes:
+          - name: data
+            persistentVolumeClaim:
+              claimName: influxdb-data
           - name: backup
             nfs:
               server: ${NFS_SERVER}
