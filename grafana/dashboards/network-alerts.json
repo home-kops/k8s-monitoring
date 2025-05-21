@@ -88,13 +88,6 @@
         {
           "id": "renameByRegex",
           "options": {
-            "regex": "_value",
-            "renamePattern": "Local - $1"
-          }
-        },
-        {
-          "id": "renameByRegex",
-          "options": {
             "regex": "_value (192\\.168\\.\\d+\\.\\d+)",
             "renamePattern": "$1 (local)"
           }
@@ -103,7 +96,7 @@
           "id": "renameByRegex",
           "options": {
             "regex": "_value (.*)",
-            "renamePattern": "$1 (local)"
+            "renamePattern": "$1"
           }
         }
       ],
