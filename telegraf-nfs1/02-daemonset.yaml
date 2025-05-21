@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: telegraf-nfs1
-        image: msd117/telegraf-snmp:0.0.2
+        image: msd117/telegraf-snmp:0.0.3
         env:
         - name: SNMP_USERNAME
           valueFrom:
