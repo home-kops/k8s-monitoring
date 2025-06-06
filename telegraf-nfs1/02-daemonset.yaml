@@ -47,3 +47,8 @@ spec:
       - name: config
         configMap:
           name: telegraf-nfs1-config
+      tolerations:
+      - key: "role"
+        operator: "Equal"
+        value: "node-s"
+        effect: "NoSchedule"

@@ -7,7 +7,16 @@ podTemplate(
       ttyEnabled: true
     )
   ],
-  namespace: 'devops-tools'
+  namespace: 'devops-tools',
+  yaml: """
+apiVersion: v1
+spec:
+  tolerations:
+    - key: "role"
+      operator: "Equal"
+      value: "node-s"
+      effect: "NoSchedule"
+"""
 ) {
   node(POD_LABEL) {
     stage('Clone') {

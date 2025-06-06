@@ -65,3 +65,8 @@ spec:
       - name: dashboards
         configMap:
           name: grafana-dashboards
+      tolerations:
+      - key: "role"
+        operator: "Equal"
+        value: "node-s"
+        effect: "NoSchedule"

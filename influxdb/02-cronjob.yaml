@@ -39,3 +39,8 @@ spec:
             nfs:
               server: ${NFS_SERVER}
               path: /volume1/kubernetes/backup/influxdb
+          tolerations:
+          - key: "role"
+            operator: "Equal"
+            value: "node-s"
+            effect: "NoSchedule"
