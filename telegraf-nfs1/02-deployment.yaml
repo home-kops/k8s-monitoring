@@ -13,6 +13,10 @@ spec:
       labels:
         name: telegraf-nfs1
     spec:
+      securityContext:
+        runAsUser: 1000
+        runAsGroup: 1000
+        fsGroup: 1000
       containers:
       - name: telegraf-nfs1
         image: msd117/telegraf-snmp:0.0.3
@@ -37,8 +41,6 @@ spec:
             secretKeyRef:
               name: telegraf-nfs1-secrets
               key: influxdb-telegraf-nfs1-token
-        securityContext:
-          runAsUser: 1000
         volumeMounts:
         - name: config
           mountPath: /etc/telegraf/telegraf.conf
