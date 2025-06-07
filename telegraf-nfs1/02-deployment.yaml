@@ -21,6 +21,11 @@ spec:
       - name: telegraf-nfs1
         image: msd117/telegraf-snmp:0.0.3
         env:
+        - name: NAS1_HOST
+          valueFrom:
+            secretKeyRef:
+              name: telegraf-nfs1-secrets
+              key: nas1-host
         - name: SNMP_USERNAME
           valueFrom:
             secretKeyRef:
