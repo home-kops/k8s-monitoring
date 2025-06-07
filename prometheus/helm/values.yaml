@@ -6,3 +6,10 @@ server:
       traefik.ingress.kubernetes.io/router.entrypoints: prometheus
     hosts:
     - prometheus.${DOMAIN}
+  persistentVolume:
+    existingClaim: prometheus-data
+  tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "node-m"
+    effect: "NoSchedule"

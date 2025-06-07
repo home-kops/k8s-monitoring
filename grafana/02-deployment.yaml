@@ -68,5 +68,5 @@ spec:
       tolerations:
       - key: "role"
         operator: "Equal"
-        value: "node-s"
+        value: "node-m"
         effect: "NoSchedule"

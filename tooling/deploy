@@ -37,14 +37,14 @@ influxdb_dir="${project_path}/influxdb"
 
 # Replace env variables
 envsubst '${DOMAIN} ${NFS_SERVER}' <"${influxdb_dir}"/02-cronjob.yaml | sponge "${influxdb_dir}"/02-cronjob.yaml
-envsubst '${DOMAIN}' <"${influxdb_dir}"/values.yaml | sponge "${influxdb_dir}"/values.yaml
+envsubst '${DOMAIN}' <"${influxdb_dir}"/helm/values.yaml | sponge "${influxdb_dir}"/helm/values.yaml
 
 kubectl apply -f "${influxdb_dir}"/00-secret.yaml,"${influxdb_dir}"/01-pvc.yaml --dry-run="${dry_run_mode}"
 
 if [[ "${dry_run_mode}" == "server" ]]; then
-    helm upgrade influxdb influxdata/influxdb2 --install --namespace monitoring --values "${influxdb_dir}"/values.yaml --dry-run="server"
+    helm upgrade influxdb influxdata/influxdb2 --install --namespace monitoring --values "${influxdb_dir}"/helm/values.yaml --dry-run="server"
 else
-    helm upgrade influxdb influxdata/influxdb2 --install --namespace monitoring --values "${influxdb_dir}"/values.yaml
+    helm upgrade influxdb influxdata/influxdb2 --install --namespace monitoring --values "${influxdb_dir}"/helm/values.yaml
 fi
 
 kubectl apply -f "${influxdb_dir}"/02-cronjob.yaml --dry-run="${dry_run_mode}"
@@ -65,13 +65,15 @@ echo -e "Done!\n"
 echo -e "\nDeploying Prometheus..."
 prometheus_dir="${project_path}/prometheus"
 
+kubectl apply -f "${prometheus_dir}" --dry-run="${dry_run_mode}"
+
 # Replace env variables
-envsubst <"${prometheus_dir}"/values.yaml | sponge "${prometheus_dir}"/values.yaml
+envsubst <"${prometheus_dir}"/helm/values.yaml | sponge "${prometheus_dir}"/helm/values.yaml
 
 if [[ "${dry_run_mode}" == "server" ]]; then
-    helm upgrade prometheus prometheus-community/prometheus --install --namespace monitoring --values "${prometheus_dir}"/values.yaml --dry-run="server"
+    helm upgrade prometheus prometheus-community/prometheus --install --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --dry-run="server"
 else
-    helm upgrade prometheus prometheus-community/prometheus --install --namespace monitoring --values "${prometheus_dir}"/values.yaml
+    helm upgrade prometheus prometheus-community/prometheus --install --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml
 fi
 
 echo -e "Done!\n"

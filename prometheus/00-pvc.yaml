@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: influxdb-data
+  name: prometheus-data
   namespace: monitoring
 spec:
   storageClassName: nfs-sc
@@ -9,4 +9,4 @@ spec:
   - ReadWriteOnce
   resources:
     requests:
-      storage: 50Gi
+      storage: 8Gi

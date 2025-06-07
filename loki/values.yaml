@@ -35,6 +35,17 @@ deploymentMode: SingleBinary
 
 singleBinary:
   replicas: 1
+  persistence:
+    enabled: true
+    accessModes:
+    - ReadWriteOnce
+    size: 10Gi
+    storageClassName: nfs-sc
+  tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "node-m"
+    effect: "NoSchedule"
 
 backend:
   replicas: 0

@@ -15,3 +15,8 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
   hostname: influxdb.${DOMAIN}
+tolerations:
+- key: "role"
+  operator: "Equal"
+  value: "node-m"
+  effect: "NoSchedule"

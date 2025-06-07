@@ -67,6 +67,11 @@ controller:
     - name: traefik-logs
       hostPath:
         path: /var/log/traefik
+  tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "node-s"
+    effect: "NoSchedule"
 
 ingress:
   enabled: true

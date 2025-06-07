@@ -1,9 +1,10 @@
 apiVersion: apps/v1
-kind: DaemonSet
+kind: Deployment
 metadata:
   name: telegraf-nfs1
   namespace: monitoring
 spec:
+  replicas: 1
   selector:
     matchLabels:
       name: telegraf-nfs1
@@ -37,7 +38,7 @@ spec:
               name: telegraf-nfs1-secrets
               key: influxdb-telegraf-nfs1-token
         securityContext:
-          runAsUser: 1000              
+          runAsUser: 1000
         volumeMounts:
         - name: config
           mountPath: /etc/telegraf/telegraf.conf
