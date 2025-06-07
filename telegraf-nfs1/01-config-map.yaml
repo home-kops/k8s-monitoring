@@ -13,7 +13,7 @@ data:
       quiet = false
 
     [[inputs.snmp]]
-      agents = ["udp://nfs1.${DOMAIN}:161"]
+      agents = ["udp://nas1.${DOMAIN}:161"]
       agent_host_tag = "source"
       interval = "2m"
       timeout = "60s"
