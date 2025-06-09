@@ -1,0 +1,44 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: suricata
+  namespace: monitoring
+spec:
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: suricata
+  template:
+    metadata:
+      labels:
+        app: suricata
+    spec:
+      containers:
+      - name: suricata
+        image: jasonish/suricata:7.0.10
+        securityContext:
+          privileged: true
+        volumeMounts:
+        - name: hostdev
+          mountPath: /dev
+        - name: config
+          mountPath: /etc/suricata/
+        - name: log
+          mountPath: /var/log/suricata
+        command: ["/usr/bin/suricata", "-i", "eth1", "-c", "/etc/suricata/suricata.yaml", "-v"]
+      volumes:
+      - name: hostdev
+        hostPath:
+          path: /dev
+      - name: config
+        configMap:
+          name: suricata-config
+      - name: log
+        persistentVolumeClaim:
+          claimName: suricata-logs
+      tolerations:
+      - key: "role"
+        operator: "Equal"
+        value: "node-m"
+        effect: "NoSchedule"

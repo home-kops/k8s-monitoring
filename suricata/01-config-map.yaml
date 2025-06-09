@@ -1,0 +1,80 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: suricata-config
+  namespace: monitoring
+data:
+  suricata.yaml: |
+    %YAML 1.1
+    ---
+    # Interfaz a monitorear
+    af-packet:
+    - interface: eth1
+      cluster-id: 99
+      cluster-type: cluster_flow
+      defrag: yes
+      use-mmap: yes
+      ring-size: 200000
+      block-size: 1048576
+      buffer-size: 65536
+      max-pending-packets: 1024
+      checksum-checks: auto
+
+    # Registros
+    outputs:
+    - fast:
+        enabled: yes
+        filename: fast.log
+    - eve-log:
+        enabled: yes
+        filetype: regular
+        filename: eve.json
+        types:
+        - alert:
+            payload: yes
+            metadata: yes
+            tags: yes
+            packet: yes
+        - dns:
+        - http:
+        - tls:
+        - ssh:
+        - smtp:
+        - stats:
+            totals: yes
+            threads: yes
+    - stats:
+        enabled: yes
+        filename: stats.log
+        interval: 60
+
+    # Detección
+    detect-engine:
+      - profile: medium
+        custom-values:
+          toclient-groups: 3
+          toserver-groups: 3
+
+    logging:
+      default-log-level: notice
+      outputs:
+      - console:
+          enabled: yes
+      - file:
+          enabled: yes
+          filename: /var/log/suricata/suricata.log
+          level: info
+
+    # Archivo de reglas
+    default-rule-path: /etc/suricata/rules
+    rule-files:
+    - suricata.rules
+
+    # Red local (ajusta según tu red LAN)
+    vars:
+      address-groups:
+        HOME_NET: "[192.168.0.0/16]"
+
+    # Otros ajustes
+    stats:
+      enabled: yes
