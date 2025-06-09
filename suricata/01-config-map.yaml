@@ -7,7 +7,6 @@ data:
   suricata.yaml: |
     %YAML 1.1
     ---
-    # Interfaz a monitorear
     af-packet:
     - interface: eth0
       cluster-id: 99
@@ -20,7 +19,6 @@ data:
       max-pending-packets: 1024
       checksum-checks: auto
 
-    # Registros
     outputs:
     - fast:
         enabled: yes
@@ -65,16 +63,13 @@ data:
           filename: /var/log/suricata/suricata.log
           level: info
 
-    # Archivo de reglas
-    default-rule-path: /etc/suricata/rules
+    default-rule-path: /var/lib/suricata/rules/suricata.rules
     rule-files:
     - suricata.rules
 
-    # Red local (ajusta según tu red LAN)
     vars:
       address-groups:
         HOME_NET: "[192.168.0.0/16]"
 
-    # Otros ajustes
     stats:
       enabled: yes
