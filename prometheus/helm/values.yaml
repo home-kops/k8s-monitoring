@@ -8,6 +8,8 @@ server:
     - prometheus.${DOMAIN}
   persistentVolume:
     existingClaim: prometheus-data
+  extraArgs:
+    web.enable-remote-write-receiver: ""
   tolerations:
   - key: "role"
     operator: "Equal"
