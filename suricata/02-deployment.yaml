@@ -19,6 +19,10 @@ spec:
       - name: suricata
         image: jasonish/suricata:7.0.10
         securityContext:
+          runAsUser: 0
+          runAsGroup: 1000
+          fsGroup: 1000
+          fsGroupChangePolicy: "Always"
           capabilities:
             add: ["NET_ADMIN", "SYS_NICE"]
         volumeMounts:
