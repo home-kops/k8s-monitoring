@@ -14,11 +14,6 @@ spec:
       labels:
         app: suricata
     spec:
-      securityContext:
-        runAsUser: 0
-        runAsGroup: 1000
-        fsGroup: 1000
-        fsGroupChangePolicy: "Always"
       hostNetwork: true
       containers:
       - name: suricata
