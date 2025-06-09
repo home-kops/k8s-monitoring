@@ -26,6 +26,7 @@ lapi:
       ingressClassName: traefik
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
+        nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
       host: lapi.${DOMAIN}
   persistentVolume:
     data:
