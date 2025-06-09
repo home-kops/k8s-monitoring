@@ -56,6 +56,8 @@ echo -e "Done!\n"
 echo -e "\nDeploying crowdsec..."
 crowdsec_dir="${project_path}/crowdsec"
 
+envsubst <"${crowdsec_dir}"/helm/values.yaml | sponge "${crowdsec_dir}"/helm/values.yaml
+
 if [[ "${dry_run_mode}" == "server" ]]; then
     helm upgrade crowdsec crowdsec/crowdsec --install --namespace monitoring --values "${crowdsec_dir}"/helm/values.yaml --dry-run="server"
 else
