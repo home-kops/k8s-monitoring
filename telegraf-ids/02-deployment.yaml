@@ -17,6 +17,15 @@ spec:
         runAsUser: 1000
         runAsGroup: 1000
         fsGroup: 1000
+    initContainers:
+    - name: fix-log-perms
+      image: busybox
+      command: ["sh", "-c", "chown -R 0:1000 /var/log/suricata && chmod -R g+rx /var/log/suricata"]
+      volumeMounts:
+      - name: suricata-logs
+        mountPath: /var/log/suricata
+    securityContext:
+      runAsUser: 0
       containers:
       - name: telegraf-ids
         image: telegraf:1.34.4
@@ -31,13 +40,13 @@ spec:
           mountPath: /etc/telegraf/telegraf.conf
           subPath: telegraf.conf
           readOnly: true
-        - name: log
+        - name: suricata-logs
           mountPath: /var/log/suricata
       volumes:
       - name: config
         configMap:
           name: telegraf-ids-config
-      - name: log
+      - name: suricata-logs
         persistentVolumeClaim:
           claimName: suricata-logs
       tolerations:
