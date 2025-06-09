@@ -23,17 +23,6 @@ lapi:
   envFrom:
   - secretRef:
       name: crowdsec-secrets
-  dashboard:
-    enabled: true
-    envFrom:
-    - secretRef:
-        name: crowdsec-secrets
-    ingress:
-      enabled: true
-      ingressClassName: traefik
-      annotations:
-        traefik.ingress.kubernetes.io/router.entrypoints: web
-      host: lapi.${DOMAIN}
   persistentVolume:
     data:
       enabled: true
