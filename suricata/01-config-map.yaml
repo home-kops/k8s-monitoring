@@ -63,7 +63,7 @@ data:
           filename: /var/log/suricata/suricata.log
           level: info
 
-    default-rule-path: /var/lib/suricata/rules/suricata.rules
+    default-rule-path: /var/lib/suricata/rules
     rule-files:
     - suricata.rules
 
