@@ -19,6 +19,7 @@ done
 
 # Add helm repositories
 helm repo add influxdata https://helm.influxdata.com/ && \
+    helm repo add crowdsec https://crowdsecurity.github.io/helm-charts && \
     helm repo add grafana https://grafana.github.io/helm-charts && \
     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts && \
     helm repo update
@@ -48,6 +49,18 @@ else
 fi
 
 kubectl apply -f "${influxdb_dir}"/02-cronjob.yaml --dry-run="${dry_run_mode}"
+
+echo -e "Done!\n"
+
+# crowdsec
+echo -e "\nDeploying crowdsec..."
+crowdsec_dir="${project_path}/crowdsec"
+
+if [[ "${dry_run_mode}" == "server" ]]; then
+    helm upgrade crowdsec crowdsec/crowdsec --install --namespace monitoring --values "${crowdsec_dir}"/helm/values.yaml --dry-run="server"
+else
+    helm upgrade crowdsec crowdsec/crowdsec --install --namespace monitoring --values "${crowdsec_dir}"/helm/values.yaml
+fi
 
 echo -e "Done!\n"
 

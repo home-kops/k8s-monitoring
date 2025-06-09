@@ -1,0 +1,19 @@
+# for raw logs format: json or cri (docker|containerd)
+container_runtime: containerd
+agent:
+  tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "cp"
+    effect: "NoSchedule"
+  # Specify each pod whose logs you want to process
+  acquisition:
+  # The namespace where the pod is located
+  - namespace: network
+    # The pod name
+    podName: traefik-*
+    # as in crowdsec configuration, we need to specify the program name to find a matching parser
+    program: traefik
+  env:
+  - name: COLLECTIONS
+    value: "crowdsecurity/traefik"
