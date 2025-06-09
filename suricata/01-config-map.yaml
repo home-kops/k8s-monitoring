@@ -73,5 +73,8 @@ data:
         EXTERNAL_NET: "!$HOME_NET"
         HTTP_SERVERS: "$HOME_NET"
 
+      port-groups:
+        HTTP_PORTS: "[80, 443, 8080, 8443]" 
+
     stats:
       enabled: yes
