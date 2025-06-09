@@ -19,7 +19,7 @@ agent:
     value: "crowdsecurity/traefik"
 
 lapi:
-  enabled: false
+  enabled: true
   dashboard:
     ingress:
       enabled: true
@@ -27,6 +27,13 @@ lapi:
       annotations:
         traefik.ingress.kubernetes.io/router.entrypoints: websecure
       host: lapi.${DOMAIN}
+  persistentVolume:
+    data:
+      enabled: true
+      accessModes:
+      - ReadWriteMany
+      storageClassName: nfs-sc
+      size: 1Gi
   tolerations:
   - key: "role"
     operator: "Equal"
