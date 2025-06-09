@@ -20,6 +20,22 @@ loki:
   ruler:
     enable_api: true
 
+chunksCache:
+  enabled: true
+  tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "node-s"
+    effect: "NoSchedule"
+
+resultsCache:
+  enabled: true
+  tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "node-s"
+    effect: "NoSchedule"
+
 gateway:
   enabled: false
 
