@@ -19,12 +19,14 @@ agent:
     value: "crowdsecurity/traefik"
 
 lapi:
-  ingress:
-    enabled: true
-    ingressClassName: traefik
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    host: lapi.${DOMAIN}
+  enabled: false
+  dashboard:
+    ingress:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        traefik.ingress.kubernetes.io/router.entrypoints: websecure
+      host: lapi.${DOMAIN}
   tolerations:
   - key: "role"
     operator: "Equal"
