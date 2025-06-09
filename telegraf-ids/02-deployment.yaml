@@ -13,8 +13,6 @@ spec:
       labels:
         name: telegraf-ids
     spec:
-      securityContext:
-        runAsUser: 0
       containers:
       - name: telegraf-ids
         image: telegraf:1.34.4
