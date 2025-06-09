@@ -56,6 +56,14 @@ alloy:
         ]
         forward_to = [loki.write.default.receiver]
       }
+
+      prometheus.scrape "traefik" {
+        targets      = [
+          {"__address__" = "http://crowdsec-service.crowdsec.svc.cluster.local:6060", "instance" = "crowdsec"}
+        ]
+        forward_to   = [prometheus.remote_write.default.receiver]
+        metrics_path = "/metrics"
+      }
   mounts:
     extra:
     - name: traefik-logs
