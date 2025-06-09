@@ -80,6 +80,14 @@ controller:
     operator: "Equal"
     value: "node-s"
     effect: "NoSchedule"
+  - key: "role"
+    operator: "Equal"
+    value: "node-m"
+    effect: "NoSchedule"
+  - key: "role"
+    operator: "Equal"
+    value: "cp"
+    effect: "NoSchedule"
 
 ingress:
   enabled: true
