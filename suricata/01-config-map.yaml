@@ -78,3 +78,43 @@ data:
     # Otros ajustes
     stats:
       enabled: yes
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: suricata-threshold-config
+  namespace: monitoring
+data:
+  threshold.config: |
+    # Thresholding configuration
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: suricata-classification-config
+  namespace: monitoring
+data:
+  classification.config: |
+    # classification.config
+    config classification: attempted-admin,Attempted Administrator Privilege Gain,1
+    config classification: successful-admin,Successful Administrator Privilege Gain,2
+    config classification: attempted-user,Attempted User Privilege Gain,3
+    config classification: successful-user,Successful User Privilege Gain,4
+    config classification: attempted-dos,Attempted Denial of Service,5
+    config classification: successful-dos,Successful Denial of Service,6
+    config classification: trojan-activity,A Network Trojan was detected,7
+    config classification: misc-activity,Miscellaneous activity,8
+    config classification: unknown,Unknown Traffic,9
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: suricata-reference-config
+  namespace: monitoring
+data:
+  reference.config: |
+    # reference.config
+    config reference: cve https://cve.mitre.org/cgi-bin/cvename.cgi?name=%s
+    config reference: url http://%s
+    config reference: bugtraq http://www.securityfocus.com/bid/%s
+    config reference: urlhaus https://urlhaus.abuse.ch/url/%s/

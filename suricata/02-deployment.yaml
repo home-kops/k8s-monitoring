@@ -23,7 +23,21 @@ spec:
         - name: hostdev
           mountPath: /dev
         - name: config
-          mountPath: /etc/suricata/
+          mountPath: /etc/suricata/suricata.yaml
+          subPath: suricata.yaml
+          readOnly: true
+        - name: threshold-config
+          mountPath: /etc/suricata/threshold.config
+          subPath: threshold.config
+          readOnly: true
+        - name: suricata-classification-config
+          mountPath: /etc/suricata/classification.config
+          subPath: classification.config
+          readOnly: true
+        - name: suricata-reference-config
+          mountPath: /etc/suricata/reference.config
+          subPath: reference.config
+          readOnly: true
         - name: log
           mountPath: /var/log/suricata
         command: ["/usr/bin/suricata", "-i", "eth0", "-c", "/etc/suricata/suricata.yaml", "-v"]
@@ -34,6 +48,15 @@ spec:
       - name: config
         configMap:
           name: suricata-config
+      - name: threshold-config
+        configMap:
+          name: suricata-threshold-config
+      - name: suricata-classification-config
+        configMap:
+          name: suricata-classification-config
+      - name: suricata-reference-config
+        configMap:
+          name: suricata-reference-config
       - name: log
         persistentVolumeClaim:
           claimName: suricata-logs
