@@ -30,7 +30,7 @@ spec:
           readOnly: true
         - name: log
           mountPath: /var/log/suricata
-        command: [/usr/bin/suricata", "-i", "eth0", "-c", "/suricata.yaml", "-v"]
+        command: ["/usr/bin/suricata", "-i", "eth0", "-c", "/suricata.yaml", "-v"]
       volumes:
       - name: hostdev
         hostPath:
