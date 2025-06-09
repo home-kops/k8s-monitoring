@@ -14,7 +14,7 @@ server:
     value: "node-m"
     effect: "NoSchedule"
 
-pushgateway:
+prometheus-pushgateway:
   enabled: true
   tolerations:
   - key: "role"
