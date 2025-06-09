@@ -13,3 +13,11 @@ server:
     operator: "Equal"
     value: "node-m"
     effect: "NoSchedule"
+
+pushgateway:
+  enabled: true
+  tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "node-m"
+    effect: "NoSchedule"
