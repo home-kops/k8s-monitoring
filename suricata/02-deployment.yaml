@@ -14,11 +14,13 @@ spec:
       labels:
         app: suricata
     spec:
+      hostNetwork: true
       containers:
       - name: suricata
         image: jasonish/suricata:7.0.10
         securityContext:
-          privileged: true
+          capabilities:
+            add: ["NET_ADMIN", "SYS_NICE"]
         volumeMounts:
         - name: hostdev
           mountPath: /dev
