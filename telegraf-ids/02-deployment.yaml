@@ -14,16 +14,7 @@ spec:
         name: telegraf-ids
     spec:
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
-      initContainers:
-      - name: fix-log-perms
-        image: busybox
-        command: ["sh", "-c", "chown -R 0:1000 /var/log/suricata && chmod -R g+rx /var/log/suricata"]
-        volumeMounts:
-        - name: suricata-logs
-          mountPath: /var/log/suricata
+        runAsUser: 0
       containers:
       - name: telegraf-ids
         image: telegraf:1.34.4
