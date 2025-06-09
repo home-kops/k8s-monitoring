@@ -9,7 +9,7 @@ data:
     ---
     # Interfaz a monitorear
     af-packet:
-    - interface: eth1
+    - interface: eth0
       cluster-id: 99
       cluster-type: cluster_flow
       defrag: yes

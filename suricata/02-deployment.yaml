@@ -26,7 +26,7 @@ spec:
           mountPath: /etc/suricata/
         - name: log
           mountPath: /var/log/suricata
-        command: ["/usr/bin/suricata", "-i", "eth1", "-c", "/etc/suricata/suricata.yaml", "-v"]
+        command: ["/usr/bin/suricata", "-i", "eth0", "-c", "/etc/suricata/suricata.yaml", "-v"]
       volumes:
       - name: hostdev
         hostPath:
