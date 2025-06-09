@@ -20,8 +20,14 @@ agent:
 
 lapi:
   enabled: true
+  envFrom:
+  - secretRef:
+    name: crowdsec-secrets
   dashboard:
     enabled: true
+    envFrom:
+    - secretRef:
+      name: crowdsec-secrets
     ingress:
       enabled: true
       ingressClassName: traefik

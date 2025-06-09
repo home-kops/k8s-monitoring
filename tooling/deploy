@@ -64,6 +64,8 @@ else
     helm upgrade crowdsec crowdsec/crowdsec --install --namespace monitoring --values "${crowdsec_dir}"/helm/values.yaml
 fi
 
+kubectl apply -f "${crowdsec_dir}"/02-cronjob.yaml --dry-run="${dry_run_mode}"
+
 echo -e "Done!\n"
 
 # Telegraf nfs1
