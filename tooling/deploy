@@ -52,21 +52,21 @@ kubectl apply -f "${influxdb_dir}"/02-cronjob.yaml --dry-run="${dry_run_mode}"
 echo -e "Done!\n"
 
 # Suricata
-echo -e "\nDeploying Suricata..."
-suricata_dir="${project_path}/suricata"
-
-kubectl apply -f "${suricata_dir}" --dry-run="${dry_run_mode}"
-echo -e "Done!\n"
-
-# Telegraf ids
-echo -e "\nDeploying Telegraf for ids..."
-telegraf_ids_dir="${project_path}/telegraf-ids"
-
-# Replace env variables
-envsubst '${DOMAIN}' <"${telegraf_ids_dir}"/01-config-map.yaml | sponge "${telegraf_ids_dir}"/01-config-map.yaml
-
-kubectl apply -f "${telegraf_ids_dir}" --dry-run="${dry_run_mode}"
-echo -e "Done!\n"
+# echo -e "\nDeploying Suricata..."
+# suricata_dir="${project_path}/suricata"
+# 
+# kubectl apply -f "${suricata_dir}" --dry-run="${dry_run_mode}"
+# echo -e "Done!\n"
+# 
+# # Telegraf ids
+# echo -e "\nDeploying Telegraf for ids..."
+# telegraf_ids_dir="${project_path}/telegraf-ids"
+# 
+# # Replace env variables
+# envsubst '${DOMAIN}' <"${telegraf_ids_dir}"/01-config-map.yaml | sponge "${telegraf_ids_dir}"/01-config-map.yaml
+# 
+# kubectl apply -f "${telegraf_ids_dir}" --dry-run="${dry_run_mode}"
+# echo -e "Done!\n"
 
 # Telegraf nfs1
 echo -e "\nDeploying Telegraf for NFS1..."
