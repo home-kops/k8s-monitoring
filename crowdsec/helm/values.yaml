@@ -24,8 +24,7 @@ lapi:
     ingressClassName: traefik
     annotations:
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    hosts:
-    - lapi.${DOMAIN}
+    host: lapi.${DOMAIN}
   tolerations:
   - key: "role"
     operator: "Equal"
