@@ -8,15 +8,7 @@ podTemplate(
     )
   ],
   namespace: 'devops-tools',
-  yaml: """
-apiVersion: v1
-spec:
-  tolerations:
-    - key: "role"
-      operator: "Equal"
-      value: "node-s"
-      effect: "NoSchedule"
-"""
+  nodeSelector: [size: 'node-s']
 ) {
   node(POD_LABEL) {
     stage('Clone') {
