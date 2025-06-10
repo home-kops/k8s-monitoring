@@ -23,12 +23,12 @@ loki:
 chunksCache:
   enabled: true
   nodeSelector:
-    size: node-m
+    size: m
 
 resultsCache:
   enabled: true
   nodeSelector:
-    size: node-m
+    size: m
 
 gateway:
   enabled: false
@@ -52,7 +52,7 @@ singleBinary:
     size: 10Gi
     storageClassName: nfs-sc
   nodeSelector:
-    size: node-m
+    size: m
 
 backend:
   replicas: 0

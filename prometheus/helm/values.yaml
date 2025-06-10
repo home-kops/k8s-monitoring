@@ -11,9 +11,9 @@ server:
   extraArgs:
     web.enable-remote-write-receiver: ""
   nodeSelector:
-    size: node-m
+    size: m
 
 prometheus-pushgateway:
   enabled: true
   nodeSelector:
-    size: node-m
+    size: m

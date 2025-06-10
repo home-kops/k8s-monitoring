@@ -18,20 +18,6 @@ metadata:
   name: grafana-datasources
   namespace: monitoring
 data:
-  influxdb.yaml: |
-    apiVersion: 1
-    datasources:
-    - name: influxdb
-      type: influxdb
-      access: proxy
-      url: https://influxdb.${DOMAIN}
-      uid: "P951FEA4DE68E13C5"
-      jsonData:
-        version: Flux
-        organization: "krieg"
-        defaultBucket: "default"
-      secureJsonData:
-        token: "${GF_DATASOURCE_INFLUXDB_TOKEN}"
   prometheus.yaml: |
     apiVersion: 1
     datasources:

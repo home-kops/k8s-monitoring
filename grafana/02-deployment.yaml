@@ -15,7 +15,7 @@ spec:
         app: grafana
     spec:
       nodeSelector:
-        size: node-m
+        size: m
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000

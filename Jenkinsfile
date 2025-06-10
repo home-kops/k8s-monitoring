@@ -8,7 +8,8 @@ podTemplate(
     )
   ],
   namespace: 'devops-tools',
-  nodeSelector: [size: 'node-s']
+  nodeSelector:
+    size:s
 ) {
   node(POD_LABEL) {
     stage('Clone') {
