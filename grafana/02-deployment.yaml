@@ -14,6 +14,8 @@ spec:
       labels:
         app: grafana
     spec:
+      nodeSelector:
+        size: node-m
       securityContext:
         runAsUser: 1000
         runAsGroup: 1000
@@ -66,8 +68,3 @@ spec:
       - name: dashboards
         configMap:
           name: grafana-dashboards
-      tolerations:
-      - key: "role"
-        operator: "Equal"
-        value: "node-m"
-        effect: "NoSchedule"

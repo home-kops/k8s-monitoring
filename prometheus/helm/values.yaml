@@ -10,16 +10,10 @@ server:
     existingClaim: prometheus-data
   extraArgs:
     web.enable-remote-write-receiver: ""
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "node-m"
-    effect: "NoSchedule"
+  nodeSelector:
+    size: node-m
 
 prometheus-pushgateway:
   enabled: true
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "node-m"
-    effect: "NoSchedule"
+  nodeSelector:
+    size: node-m

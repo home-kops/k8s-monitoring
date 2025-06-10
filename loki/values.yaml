@@ -22,19 +22,13 @@ loki:
 
 chunksCache:
   enabled: true
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "node-m"
-    effect: "NoSchedule"
+  nodeSelector:
+    size: node-m
 
 resultsCache:
   enabled: true
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "node-m"
-    effect: "NoSchedule"
+  nodeSelector:
+    size: node-m
 
 gateway:
   enabled: false
@@ -57,11 +51,8 @@ singleBinary:
     - ReadWriteOnce
     size: 10Gi
     storageClassName: nfs-sc
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "node-m"
-    effect: "NoSchedule"
+  nodeSelector:
+    size: node-m
 
 backend:
   replicas: 0
