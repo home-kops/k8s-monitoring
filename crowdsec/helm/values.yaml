@@ -1,6 +1,8 @@
 # for raw logs format: json or cri (docker|containerd)
 container_runtime: containerd
 agent:
+  nodeSelector:
+    role: cp
   tolerations:
   - key: "role"
     operator: "Equal"
@@ -30,6 +32,8 @@ lapi:
       - ReadWriteMany
       storageClassName: nfs-sc
       size: 1Gi
+  nodeSelector:
+    role: cp
   tolerations:
   - key: "role"
     operator: "Equal"
