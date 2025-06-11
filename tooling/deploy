@@ -36,8 +36,6 @@ kubectl apply -f "${project_path}"/common --dry-run="${dry_run_mode}"
 echo -e "\nDeploying prometheus..."
 prometheus_dir="${project_path}/prometheus"
 
-kubectl apply -f "${prometheus_dir}" --dry-run="${dry_run_mode}"
-
 # Replace env variables
 envsubst <"${prometheus_dir}"/helm/values.yaml | sponge "${prometheus_dir}"/helm/values.yaml
 
