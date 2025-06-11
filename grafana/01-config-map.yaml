@@ -44,6 +44,10 @@ data:
       uid: "61nfXLoLSDBbLek8D"
       basicAuth: false
       version: 1
+      jsonData:
+        httpHeaderName1: 'X-Scope-OrgID'
+      secureJsonData:
+        httpHeaderValue1: 'krieg'
 ---
 apiVersion: v1
 kind: ConfigMap
