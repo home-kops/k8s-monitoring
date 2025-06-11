@@ -4,6 +4,13 @@ grafana:
 alertmanager:
   enabled: false
 
+prometheusOperator:
+  enabled: true
+  admissionWebhooks:
+    enabled: false
+    patch:
+      enabled: false
+
 prometheus:
   enabled: true
   ingress:
