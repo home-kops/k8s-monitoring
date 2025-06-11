@@ -33,14 +33,6 @@ resultsCache:
 gateway:
   enabled: false
 
-ingress:
-  enabled: true
-  ingressClassName: traefik
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: loki
-  hosts:
-  - loki.${DOMAIN}
-
 deploymentMode: SingleBinary
 
 singleBinary:

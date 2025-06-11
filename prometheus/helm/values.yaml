@@ -1,11 +1,4 @@
 server:
-  ingress:
-    enabled: true
-    ingressClassName: traefik
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: prometheus
-    hosts:
-    - prometheus.${DOMAIN}
   persistentVolume:
     enabled: true
     accessModes:
