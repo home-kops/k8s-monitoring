@@ -18,11 +18,22 @@ while getopts "d" flag; do
 done
 
 # Add helm repositories
-helm repo add influxdata https://helm.influxdata.com/ && \
-    helm repo add crowdsec https://crowdsecurity.github.io/helm-charts && \
+helm repo add crowdsec https://crowdsecurity.github.io/helm-charts && \
     helm repo add grafana https://grafana.github.io/helm-charts && \
     helm repo add prometheus-community https://prometheus-community.github.io/helm-charts && \
     helm repo update
+
+# Install prometheus crds
+if ! kubectl get crd | grep -q monitoring.coreos.com; then
+    echo -e "\nInstalling Prometheus CRDs..."
+    kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
+    kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
+    kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
+    kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
+    kubectl apply -f https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/main/example/prometheus-operator-crd/monitoring.coreos.com_prometheuses.yaml
+else
+    echo -e "\nPrometheus CRDs already installed."
+fi
 
 project_path="$(git rev-parse --show-toplevel)"
 
