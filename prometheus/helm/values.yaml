@@ -1,18 +1,4 @@
-grafana:
-  enabled: false
-
-alertmanager:
-  enabled: false
-
-prometheusOperator:
-  enabled: true
-  admissionWebhooks:
-    enabled: false
-    patch:
-      enabled: false
-
-prometheus:
-  enabled: true
+server:
   ingress:
     enabled: true
     ingressClassName: traefik
@@ -20,15 +6,25 @@ prometheus:
       traefik.ingress.kubernetes.io/router.entrypoints: prometheus
     hosts:
     - prometheus.${DOMAIN}
-  prometheusSpec:
-    storageSpec:
-      volumeClaimTemplate:
-        spec:
-          storageClassName: nfs-sc
-          accessModes: ["ReadWriteMany"]
-          resources:
-            requests:
-              storage: 8Gi
-    nodeSelector:
-      size: m
-    enableRemoteWriteReceiver: true
+  persistentVolume:
+    enabled: true
+    accessModes:
+      - ReadWriteMany
+    size: 8Gi
+    storageClass: nfs-sc
+  extraArgs:
+    web.enable-remote-write-receiver: ""
+  nodeSelector:
+    size: m
+
+alertmanager:
+  enabled: false
+
+kube-state-metrics:
+  enabled: false
+
+prometheus-node-exporter:
+  enabled: false
+
+prometheus-pushgateway:
+  enabled: false
