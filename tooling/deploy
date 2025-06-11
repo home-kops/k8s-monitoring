@@ -44,7 +44,7 @@ if ! helm status prometheus-stack -n monitoring; then
     echo "prometheus stack not found, install it by running helm install"
 fi
 
-if [[ "${dry_run_mode}" == "none" ]]; then
+if [[ "${dry_run_mode}" == "server" ]]; then
     helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --dry-run="server"
 else
     helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml
