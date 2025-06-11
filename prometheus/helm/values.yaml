@@ -1,4 +1,5 @@
-server:
+prometheus:
+  enabled: true
   ingress:
     enabled: true
     ingressClassName: traefik
@@ -13,7 +14,5 @@ server:
   nodeSelector:
     size: m
 
-prometheus-pushgateway:
-  enabled: true
-  nodeSelector:
-    size: m
+grafana:
+  enabled: false
