@@ -1,3 +1,9 @@
+grafana:
+  enabled: false
+
+alertmanager:
+  enabled: false
+
 prometheus:
   enabled: true
   ingress:
@@ -7,12 +13,15 @@ prometheus:
       traefik.ingress.kubernetes.io/router.entrypoints: prometheus
     hosts:
     - prometheus.${DOMAIN}
-  persistentVolume:
-    existingClaim: prometheus-data
-  extraArgs:
-    web.enable-remote-write-receiver: ""
-  nodeSelector:
-    size: m
-
-grafana:
-  enabled: false
+  prometheusSpec:
+    storageSpec:
+      volumeClaimTemplate:
+        spec:
+          storageClassName: nfs-sc
+          accessModes: ["ReadWriteMany"]
+          resources:
+            requests:
+              storage: 8Gi
+    nodeSelector:
+      size: m
+    enableRemoteWriteReceiver: true
