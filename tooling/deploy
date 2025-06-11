@@ -41,16 +41,8 @@ kubectl apply -f "${prometheus_dir}" --dry-run="${dry_run_mode}"
 # Replace env variables
 envsubst <"${prometheus_dir}"/helm/values.yaml | sponge "${prometheus_dir}"/helm/values.yaml
 
-if [[ "${dry_run_mode}" == "server" ]]; then
+if [[ "${dry_run_mode}" == "none" ]]; then
     if ! helm status prometheus -n monitoring; then
-        echo "Installing prometheus in dry-run mode..."
-        helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --dry-run="server"
-    else
-        echo "Upgrading prometheus in dry-run mode..."
-        helm upgrade prometheus prometheus-community/kube-prometheus-stack --install --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --dry-run="server"
-    fi
-else
-if ! helm status prometheus -n monitoring; then
         echo "Installing prometheus..."
         helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml
     else
