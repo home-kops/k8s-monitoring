@@ -75,6 +75,8 @@ controller:
     - name: traefik-logs
       hostPath:
         path: /var/log/traefik
+  nodeSelector:
+    size: cp
   tolerations:
   - key: "role"
     operator: "Equal"
