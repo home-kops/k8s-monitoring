@@ -24,7 +24,7 @@ data:
     - name: prometheus
       type: prometheus
       access: proxy
-      url: http://prometheus-server:9090
+      url: http://prometheus-server
       uid: "jYEsy1N7SeRYiRLUj"
       jsonData:
         httpMethod: POST
