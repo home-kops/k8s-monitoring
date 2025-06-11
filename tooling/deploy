@@ -42,9 +42,17 @@ kubectl apply -f "${prometheus_dir}" --dry-run="${dry_run_mode}"
 envsubst <"${prometheus_dir}"/helm/values.yaml | sponge "${prometheus_dir}"/helm/values.yaml
 
 if [[ "${dry_run_mode}" == "server" ]]; then
-    helm upgrade prometheus prometheus-community/kube-prometheus-stack --install --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --dry-run="server"
+    if ! helm status prometheus -n monitoring; then
+        helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --dry-run="server"
+    else
+        helm upgrade prometheus prometheus-community/kube-prometheus-stack --install --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --dry-run="server"
+    fi
 else
-    helm upgrade prometheus prometheus-community/kube-prometheus-stack --install --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml
+if ! helm status prometheus -n monitoring; then
+        helm install prometheus prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml
+    else
+        helm upgrade prometheus prometheus-community/kube-prometheus-stack --install --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml
+    fi
 fi
 
 echo -e "Done!\n"
