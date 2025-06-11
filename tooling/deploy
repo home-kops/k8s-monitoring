@@ -39,7 +39,7 @@ prometheus_dir="${project_path}/prometheus"
 # Replace env variables
 envsubst <"${prometheus_dir}"/helm/values.yaml | sponge "${prometheus_dir}"/helm/values.yaml
 
-if ! helm status prometheus -n monitoring; then
+if ! helm status prometheus-stack -n monitoring; then
     # run helm install prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values ./prometheus/helm/values.yaml
     echo "prometheus stack not found, install it by running helm install"
 fi
