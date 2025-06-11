@@ -42,7 +42,7 @@ kubectl apply -f "${prometheus_dir}" --dry-run="${dry_run_mode}"
 envsubst <"${prometheus_dir}"/helm/values.yaml | sponge "${prometheus_dir}"/helm/values.yaml
 
 if ! helm status prometheus -n monitoring; then
-    # run helm install prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml
+    # run helm install prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values ./prometheus/helm/values.yaml
     echo "prometheus stack not found, install it by running helm install"
 
 if [[ "${dry_run_mode}" == "none" ]]; then
