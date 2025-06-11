@@ -19,6 +19,10 @@ agent:
   env:
   - name: COLLECTIONS
     value: "crowdsecurity/traefik"
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
 
 lapi:
   enabled: true
