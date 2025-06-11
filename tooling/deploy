@@ -45,9 +45,9 @@ if ! helm status prometheus-stack -n monitoring; then
 fi
 
 if [[ "${dry_run_mode}" == "server" ]]; then
-    helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --dry-run="server"
+    helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --skip-crds --dry-run="server"
 else
-    helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml
+    helm upgrade prometheus-stack prometheus-community/kube-prometheus-stack --namespace monitoring --values "${prometheus_dir}"/helm/values.yaml --skip-crds
 fi
 
 echo -e "Done!\n"
