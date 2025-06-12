@@ -76,12 +76,7 @@ controller:
       hostPath:
         path: /var/log/traefik
   nodeSelector:
-    size: cp
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "cp"
-    effect: "NoSchedule"
+    size: m
 
 ingress:
   enabled: true

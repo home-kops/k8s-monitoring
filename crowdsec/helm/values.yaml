@@ -2,12 +2,7 @@
 container_runtime: containerd
 agent:
   nodeSelector:
-    role: cp
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "cp"
-    effect: "NoSchedule"
+    size: m
   # Specify each pod whose logs you want to process
   acquisition:
   # The namespace where the pod is located
@@ -37,9 +32,4 @@ lapi:
       storageClassName: nfs-sc
       size: 1Gi
   nodeSelector:
-    role: cp
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "cp"
-    effect: "NoSchedule"
+    size: m
