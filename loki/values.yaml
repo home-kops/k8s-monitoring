@@ -43,6 +43,13 @@ singleBinary:
     - ReadWriteOnce
     size: 10Gi
     storageClassName: nfs-sc
+  resources:
+    requests:
+      cpu: 200m
+      memory: 512Mi
+    limits:
+      cpu: 500m
+      memory: 1Gi
   nodeSelector:
     size: m
 
