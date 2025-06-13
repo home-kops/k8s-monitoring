@@ -11,6 +11,13 @@ agent:
     podName: traefik-*
     # as in crowdsec configuration, we need to specify the program name to find a matching parser
     program: traefik
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
   env:
   - name: COLLECTIONS
     value: "crowdsecurity/traefik"
@@ -31,5 +38,12 @@ lapi:
       - ReadWriteMany
       storageClassName: nfs-sc
       size: 1Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
   nodeSelector:
     size: m
