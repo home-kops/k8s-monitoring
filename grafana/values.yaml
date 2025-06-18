@@ -6,10 +6,10 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
   hosts:
-  - grafana.${DOMAIN}
+  - grafana.<path:secret/data/infra/domain#value>
 
-admin:
-  existingSecret: grafana-admin-credentials
+adminUser: <path:secret/data/monitoring/grafana#admin_user>
+adminPassword: <path:secret/data/monitoring/grafana#admin_password>
 
 datasources:
   datasources.yaml:
