@@ -12,13 +12,13 @@ alloy:
   
       prometheus.remote_write "default" {
         endpoint {
-          url = "http://prometheus.${DOMAIN}:9090/api/v1/write"
+          url = "http://prometheus-server:9090/api/v1/write"
         }
       }
   
       loki.write "default" {
         endpoint {
-          url       = "http://loki.${DOMAIN}:3100/loki/api/v1/push"
+          url       = "http://loki:3100/loki/api/v1/push"
           tenant_id = "alloy"
         }
       }
@@ -43,7 +43,7 @@ alloy:
   
       prometheus.scrape "traefik" {
         targets      = [
-          {"__address__" = "traefik.${DOMAIN}:80", "instance" = "traefik"},
+          {"__address__" = "traefik.network:80", "instance" = "traefik"},
         ]
         forward_to   = [prometheus.remote_write.default.receiver]
         metrics_path = "/api"
@@ -91,4 +91,4 @@ ingress:
   annotations:
     traefik.ingress.kubernetes.io/router.entrypoints: websecure
   hosts:
-  - alloy.${DOMAIN}
+  - alloy.<path:secret/data/infra/domain#value>
