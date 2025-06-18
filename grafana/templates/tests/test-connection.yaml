@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "grafana-mod.fullname" . }}-test-connection"
+  labels:
+    {{- include "grafana-mod.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "grafana-mod.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

@@ -1,47 +1,47 @@
-replicaCount: 1
+grafana:
+  replicaCount: 1
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    hosts:
+    - grafana.<path:secret/data/infra/domain#value>
 
-ingress:
-  enabled: true
-  ingressClassName: traefik
-  annotations:
-    traefik.ingress.kubernetes.io/router.entrypoints: websecure
-  hosts:
-  - grafana.<path:secret/data/infra/domain#value>
+  adminUser: <path:secret/data/monitoring/grafana#admin_user>
+  adminPassword: <path:secret/data/monitoring/grafana#admin_password>
 
-adminUser: <path:secret/data/monitoring/grafana#admin_user>
-adminPassword: <path:secret/data/monitoring/grafana#admin_password>
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: prometheus
+        type: prometheus
+        access: proxy
+        url: http://prometheus-server
+        isDefault: true
+        jsonData:
+          httpMethod: POST
+          manageAlerts: true
+          prometheusType: Prometheus
+          prometheusVersion: 2.44.0
+          cacheLevel: 'Low'
+          disableRecordingRules: false
+      - name: loki
+        type: loki
+        access: proxy
+        url: http://loki:3100
+        orgId: 1
+        basicAuth: false
+        version: 1
+        jsonData:
+          httpHeaderName1: 'X-Scope-OrgID'
+        secureJsonData:
+          httpHeaderValue1: 'krieg'
 
-datasources:
-  datasources.yaml:
-    apiVersion: 1
-    datasources:
-    - name: prometheus
-      type: prometheus
-      access: proxy
-      url: http://prometheus-server
-      isDefault: true
-      jsonData:
-        httpMethod: POST
-        manageAlerts: true
-        prometheusType: Prometheus
-        prometheusVersion: 2.44.0
-        cacheLevel: 'Low'
-        disableRecordingRules: false
-    - name: loki
-      type: loki
-      access: proxy
-      url: http://loki:3100
-      orgId: 1
-      basicAuth: false
-      version: 1
-      jsonData:
-        httpHeaderName1: 'X-Scope-OrgID'
-      secureJsonData:
-        httpHeaderValue1: 'krieg'
-
-dashboards:
-  default:
-    traefik:
-      gnetId: 17501
-      revision: 1
-      datasource: loki
+  dashboards:
+    default:
+      traefik:
+        gnetId: 17501
+        revision: 1
+        datasource: loki

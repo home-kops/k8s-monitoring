@@ -1,77 +1,78 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: grafana
-  namespace: monitoring
+  name: {{ include "grafana-mod.fullname" . }}
+  labels:
+    {{- include "grafana-mod.labels" . | nindent 4 }}
 spec:
+  {{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
   selector:
     matchLabels:
-      app: grafana
-  strategy:
-    type: Recreate
+      {{- include "grafana-mod.selectorLabels" . | nindent 6 }}
   template:
     metadata:
+      {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       labels:
-        app: grafana
+        {{- include "grafana-mod.labels" . | nindent 8 }}
+        {{- with .Values.podLabels }}
+        {{- toYaml . | nindent 8 }}
+        {{- end }}
     spec:
-      nodeSelector:
-        size: m
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "grafana-mod.serviceAccountName" . }}
+      {{- with .Values.podSecurityContext }}
       securityContext:
-        runAsUser: 1000
-        runAsGroup: 1000
-        fsGroup: 1000
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
-      - name: grafana
-        image: grafana/grafana:12.0.1-ubuntu
-        envFrom:
-        - configMapRef:
-            name: grafana-config
-        - secretRef:
-            name: grafana-secrets
-        imagePullPolicy: IfNotPresent
-        ports:
-        - containerPort: 3000
-          name: http-grafana
-          protocol: TCP
-        readinessProbe:
-          failureThreshold: 3
-          httpGet:
-            path: /robots.txt
-            port: 3000
-            scheme: HTTP
-          initialDelaySeconds: 10
-          periodSeconds: 30
-          successThreshold: 1
-          timeoutSeconds: 2
-        livenessProbe:
-          failureThreshold: 3
-          initialDelaySeconds: 30
-          periodSeconds: 10
-          successThreshold: 1
-          tcpSocket:
-            port: 3000
-          timeoutSeconds: 1
-        volumeMounts:
-        - name: datasources
-          mountPath: /etc/grafana/provisioning/datasources
-        - name: dashboard-provider
-          mountPath: /etc/grafana/provisioning/dashboards
-        - name: dashboards
-          mountPath: /var/lib/grafana/dashboards
-        resources:
-          requests:
-            cpu: 100m
-            memory: 256Mi
-          limits:
-            cpu: 500m
-            memory: 512Mi
+        - name: {{ .Chart.Name }}
+          {{- with .Values.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.service.port }}
+              protocol: TCP
+          {{- with .Values.livenessProbe }}
+          livenessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.readinessProbe }}
+          readinessProbe:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.resources }}
+          resources:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with .Values.volumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+      {{- with .Values.volumes }}
       volumes:
-      - name: datasources
-        configMap:
-          name: grafana-datasources
-      - name: dashboard-provider
-        configMap:
-          name: grafana-dashboard-provider
-      - name: dashboards
-        configMap:
-          name: grafana-dashboards
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

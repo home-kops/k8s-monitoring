@@ -1,14 +1,15 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: grafana-service
-  namespace: monitoring
+  name: {{ include "grafana-mod.fullname" . }}
+  labels:
+    {{- include "grafana-mod.labels" . | nindent 4 }}
 spec:
+  type: {{ .Values.service.type }}
   ports:
-  - name: http-grafana
-    port: 3000
-    targetPort: http-grafana
-    protocol: TCP
+    - port: {{ .Values.service.port }}
+      targetPort: http
+      protocol: TCP
+      name: http
   selector:
-    app: grafana
-  type: ClusterIP
+    {{- include "grafana-mod.selectorLabels" . | nindent 4 }}
