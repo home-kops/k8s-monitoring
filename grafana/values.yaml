@@ -42,9 +42,7 @@ grafana:
   dashboards:
     default:
       traefik:
-        gnetId: 4475
-        revision: 1
-        datasource: prometheus
+        url: https://grafana.com/api/dashboards/17347/revisions/9/download
 
   dashboardProviders:
     dashboardproviders.yaml:
