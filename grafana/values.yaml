@@ -42,9 +42,9 @@ grafana:
   dashboards:
     default:
       traefik:
-        gnetId: 17501
+        gnetId: 17347
         revision: 1
-        datasource: loki
+        datasource: prometheus
 
   dashboardProviders:
     dashboardproviders.yaml:
