@@ -34,48 +34,48 @@ loki:
   gateway:
     enabled: false
 
-deploymentMode: SingleBinary
+  deploymentMode: SingleBinary
 
-singleBinary:
-  replicas: 1
-  persistence:
-    enabled: true
-    accessModes:
-    - ReadWriteOnce
-    size: 10Gi
-    storageClassName: nfs-sc
-  resources:
-    requests:
-      cpu: 200m
-      memory: 512Mi
-    limits:
-      cpu: 500m
-      memory: 1Gi
-  nodeSelector:
-    size: m
+  singleBinary:
+    replicas: 1
+    persistence:
+      enabled: true
+      accessModes:
+      - ReadWriteOnce
+      size: 10Gi
+      storageClassName: nfs-sc
+    resources:
+      requests:
+        cpu: 200m
+        memory: 512Mi
+      limits:
+        cpu: 500m
+        memory: 1Gi
+    nodeSelector:
+      size: m
 
-backend:
-  replicas: 0
-read:
-  replicas: 0
-write:
-  replicas: 0
+  backend:
+    replicas: 0
+  read:
+    replicas: 0
+  write:
+    replicas: 0
 
-ingester:
-  replicas: 0
-querier:
-  replicas: 0
-queryFrontend:
-  replicas: 0
-queryScheduler:
-  replicas: 0
-distributor:
-  replicas: 0
-compactor:
-  replicas: 0
-indexGateway:
-  replicas: 0
-bloomCompactor:
-  replicas: 0
-bloomGateway:
-  replicas: 0
+  ingester:
+    replicas: 0
+  querier:
+    replicas: 0
+  queryFrontend:
+    replicas: 0
+  queryScheduler:
+    replicas: 0
+  distributor:
+    replicas: 0
+  compactor:
+    replicas: 0
+  indexGateway:
+    replicas: 0
+  bloomCompactor:
+    replicas: 0
+  bloomGateway:
+    replicas: 0
