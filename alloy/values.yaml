@@ -92,4 +92,4 @@ alloy:
     annotations:
       traefik.ingress.kubernetes.io/router.entrypoints: websecure
     hosts:
-    - alloy.<path:secret/data/infra/domain#value>
+    - alloy.<path:secret/data/infra#domain>
