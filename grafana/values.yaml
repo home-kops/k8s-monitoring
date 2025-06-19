@@ -42,7 +42,7 @@ grafana:
   dashboards:
     default:
       traefik:
-        gnetId: 17346
+        gnetId: 4475
         revision: 1
         datasource: prometheus
 
