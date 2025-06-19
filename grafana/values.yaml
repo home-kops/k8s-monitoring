@@ -9,7 +9,7 @@ grafana:
     - grafana.<path:secret/data/infra#domain>
 
   adminUser: <path:secret/data/monitoring/grafana#admin_user>
-  adminPassword: <path:secret/data/monitoring/grafana#admin_password>
+  adminPassword: "<path:secret/data/monitoring/grafana#admin_password>"
 
   datasources:
     datasources.yaml:
