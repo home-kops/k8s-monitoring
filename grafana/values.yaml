@@ -45,3 +45,13 @@ grafana:
         gnetId: 17501
         revision: 1
         datasource: loki
+
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+        default:
+          folder: 'General'
+          type: file
+          options:
+            path: /var/lib/grafana/dashboards/default
