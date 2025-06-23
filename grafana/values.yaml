@@ -1,0 +1,59 @@
+grafana:
+  replicaCount: 1
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    hosts:
+    - grafana.<path:secret/data/infra#domain>
+
+  adminUser: <path:secret/data/monitoring/grafana#admin_user>
+  adminPassword: <path:secret/data/monitoring/grafana#admin_password>
+
+  datasources:
+    datasources.yaml:
+      apiVersion: 1
+      datasources:
+      - name: prometheus
+        type: prometheus
+        uid: prometheus
+        access: proxy
+        url: http://prometheus-server
+        isDefault: true
+        jsonData:
+          httpMethod: POST
+          manageAlerts: true
+          prometheusType: Prometheus
+          prometheusVersion: 2.44.0
+          cacheLevel: 'Low'
+          disableRecordingRules: false
+      - name: loki
+        type: loki
+        access: proxy
+        url: http://loki:3100
+        orgId: 1
+        basicAuth: false
+        version: 1
+        jsonData:
+          httpHeaderName1: 'X-Scope-OrgID'
+        secureJsonData:
+          httpHeaderValue1: 'krieg'
+
+  dashboards:
+    default:
+      traefik:
+        url: https://grafana.com/api/dashboards/17347/revisions/9/download
+
+  dashboardProviders:
+    dashboardproviders.yaml:
+      apiVersion: 1
+      providers:
+      - name: default
+        orgId: 1
+        folder: ""
+        type: file
+        disableDeletion: false
+        editable: false
+        options:
+          path: /var/lib/grafana/dashboards/default

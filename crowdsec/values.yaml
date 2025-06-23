@@ -1,0 +1,44 @@
+# for raw logs format: json or cri (docker|containerd)
+container_runtime: containerd
+agent:
+  nodeSelector:
+    size: m
+  # Specify each pod whose logs you want to process
+  acquisition:
+  # The namespace where the pod is located
+  - namespace: network
+    # The pod name
+    podName: traefik-*
+    # as in crowdsec configuration, we need to specify the program name to find a matching parser
+    program: traefik
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 200m
+      memory: 512Mi
+  env:
+  - name: COLLECTIONS
+    value: "crowdsecurity/traefik"
+  metrics:
+    enabled: true
+    serviceMonitor:
+      enabled: true
+
+lapi:
+  enabled: true
+  persistentVolume:
+    data:
+      enabled: true
+      storageClassName: nfs-sc
+      size: 1Gi
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  nodeSelector:
+    size: m

@@ -1,0 +1,77 @@
+alloy:
+  alloy:
+    configMap:
+      content: |-
+        livedebugging {
+          enabled = true
+        }
+
+        logging {
+          level  = "info"
+          format = "logfmt"
+        }
+
+        prometheus.remote_write "default" {
+          endpoint {
+            url = "http://prometheus-server/api/v1/write"
+          }
+        }
+
+        loki.write "default" {
+          endpoint {
+            url       = "http://loki:3100/loki/api/v1/push"
+            tenant_id = "alloy"
+          }
+        }
+
+        prometheus.scrape "traefik" {
+          targets      = [
+            {"__address__" = "traefik.network:80", "instance" = "traefik"},
+          ]
+          forward_to   = [prometheus.remote_write.default.receiver]
+          metrics_path = "/api"
+        }
+
+        loki.source.file "traefik" {
+          targets    = [
+            {__path__ = "/var/log/traefik/access.log", "color" = "blue"},
+            {__path__ = "/var/log/traefik/traefik.log", "color" = "grey"},
+          ]
+          forward_to = [loki.write.default.receiver]
+        }
+
+        prometheus.scrape "crowdsec" {
+          targets      = [
+            {"__address__" = "crowdsec-service:6060", "instance" = "crowdsec"},
+          ]
+          forward_to   = [prometheus.remote_write.default.receiver]
+          metrics_path = "/metrics"
+        }
+    mounts:
+      extra:
+      - name: traefik-logs
+        mountPath: /var/log/traefik
+
+  controller:
+    volumes:
+      extra:
+      - name: traefik-logs
+        hostPath:
+          path: /var/log/traefik
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
+    nodeSelector:
+      size: m
+
+  ingress:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    hosts:
+    - alloy.<path:secret/data/infra#domain>

@@ -1,0 +1,11 @@
+apiVersion: v2
+name: grafana
+description: Mod chart for Grafana with AVP support
+type: application
+version: 0.1.0
+appVersion: "9.2.6"
+
+dependencies:
+- name: grafana
+  version: "9.2.6"
+  repository: "https://grafana.github.io/helm-charts"
