@@ -3,7 +3,6 @@ name: alloy
 description: Mod chart for alloy with AVP support
 type: application
 version: 0.1.0
-appVersion: "1.1.1"
 
 dependencies:
 - name: alloy

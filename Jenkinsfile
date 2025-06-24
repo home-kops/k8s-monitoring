@@ -15,30 +15,36 @@ pipeline {
 
     stage('Verify') {
       steps {
-        withCredentials(
-          [
-            string(credentialsId: 'server1-domain', variable: 'DOMAIN'),
-            string(credentialsId: 'nfs1-server', variable: 'NFS_SERVER')
-          ]
-        ) {
-          // Run the deploy script dry-run mode to validate the resources
-          sh './tooling/deploy -d'
-        }
-      }
-    }
+        container('jnlp') {
+          sh '''
+            helm lint ./alloy && \
+              helm dependency build ./alloy && \
+              helm template ./alloy -f ./alloy/values.yaml
+          '''
 
-    stage('Deploy') {
-      when {
-        branch 'main'
-      }
-      steps {
-        withCredentials(
-          [
-            string(credentialsId: 'server1-domain', variable: 'DOMAIN'),
-            string(credentialsId: 'nfs1-server', variable: 'NFS_SERVER')
-          ]
-        ) {
-          sh './tooling/deploy'
+          sh '''
+            helm repo add crowdsec https://crowdsecurity.github.io/helm-charts && \
+              helm repo update && \
+              helm template crowdsec crowdsec/crowdsec -f ./crowdsec/values.yaml
+          '''
+
+          sh '''
+            helm lint ./grafana && \
+              helm dependency build ./grafana && \
+              helm template ./grafana -f ./grafana/values.yaml
+          '''
+
+          sh '''
+            helm repo add grafana https://grafana.github.io/helm-charts && \
+              helm repo update && \
+              helm template loki grafana/loki -f ./loki/values.yaml
+          '''
+
+          sh '''
+            helm repo add prometheus-community https://prometheus-community.github.io/helm-charts && \
+              helm repo update && \
+              helm template prometheus prometheus-community/prometheus -f ./prometheus/values.yaml
+          '''
         }
       }
     }
