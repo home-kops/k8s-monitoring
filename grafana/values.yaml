@@ -44,6 +44,8 @@ grafana:
     default:
       traefik:
         url: https://grafana.com/api/dashboards/17347/revisions/9/download
+      crowdsec:
+        url: https://grafana.com/api/dashboards/21419/revisions/6/download
 
   dashboardProviders:
     dashboardproviders.yaml:

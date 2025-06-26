@@ -32,14 +32,6 @@ alloy:
           metrics_path = "/api"
         }
 
-        loki.source.file "traefik" {
-          targets    = [
-            {__path__ = "/var/log/traefik/access.log", "color" = "blue"},
-            {__path__ = "/var/log/traefik/traefik.log", "color" = "grey"},
-          ]
-          forward_to = [loki.write.default.receiver]
-        }
-
         prometheus.scrape "crowdsec" {
           targets      = [
             {"__address__" = "crowdsec-agent-service:6060", "job" = "crowdsec", "instance" = "crowdsec"},
