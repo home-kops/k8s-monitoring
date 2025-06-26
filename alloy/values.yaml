@@ -32,7 +32,7 @@ alloy:
           metrics_path = "/api"
         }
 
-        prometheus.scrape "crowdsec-agent" {
+        prometheus.scrape "crowdsec_agent" {
           targets      = [
             {"__address__" = "crowdsec-agent-service:6060", "job" = "crowdsec-agent", "component" = "agent"},
           ]
@@ -40,7 +40,7 @@ alloy:
           metrics_path = "/metrics"
         }
 
-        prometheus.scrape "crowdsec-lapi" {
+        prometheus.scrape "crowdsec_lapi" {
           targets      = [
             {"__address__" = "crowdsec-service:6060", "job" = "crowdsec-lapi", "component" = "lapi"},
           ]
