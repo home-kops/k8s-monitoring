@@ -32,9 +32,17 @@ alloy:
           metrics_path = "/api"
         }
 
-        prometheus.scrape "crowdsec" {
+        prometheus.scrape "crowdsec-agent" {
           targets      = [
-            {"__address__" = "crowdsec-agent-service:6060", "job" = "crowdsec", "instance" = "crowdsec"},
+            {"__address__" = "crowdsec-agent-service:6060", "job" = "crowdsec-agent", "component" = "agent"},
+          ]
+          forward_to   = [prometheus.remote_write.default.receiver]
+          metrics_path = "/metrics"
+        }
+
+        prometheus.scrape "crowdsec-lapi" {
+          targets      = [
+            {"__address__" = "crowdsec-service:6060", "job" = "crowdsec-lapi", "component" = "lapi"},
           ]
           forward_to   = [prometheus.remote_write.default.receiver]
           metrics_path = "/metrics"
