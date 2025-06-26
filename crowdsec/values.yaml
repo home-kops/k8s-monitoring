@@ -1,8 +1,11 @@
 # for raw logs format: json or cri (docker|containerd)
 container_runtime: containerd
 agent:
-  nodeSelector:
-    size: m
+  tolerations:
+  - key: "role"
+    operator: "Equal"
+    value: "cp"
+    effect: "NoSchedule"
   # Specify each pod whose logs you want to process
   acquisition:
   # The namespace where the pod is located
