@@ -46,6 +46,8 @@ grafana:
         url: https://grafana.com/api/dashboards/17347/revisions/9/download
       crowdsec:
         url: https://grafana.com/api/dashboards/21419/revisions/6/download
+      falco:
+        url: https://grafana.com/api/dashboards/17319/revisions/7/download
 
   dashboardProviders:
     dashboardproviders.yaml:
