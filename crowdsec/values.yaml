@@ -1,5 +1,10 @@
 # for raw logs format: json or cri (docker|containerd)
 container_runtime: containerd
+tls:
+  enabled: true
+  bouncer:
+    reflector:
+      namespaces: ["network"]
 agent:
   tolerations:
   - key: "role"
