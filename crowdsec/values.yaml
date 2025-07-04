@@ -29,6 +29,24 @@ agent:
   env:
   - name: COLLECTIONS
     value: "crowdsecurity/traefik"
+  extraInitContainers:
+  - name: wait-lapi
+    image: busybox:1.35.0
+    command:
+    - sh
+    - -c
+    - |
+      while ! nc -z crowdsec-service 8080; do
+        echo "Waiting for lapi to be ready..."
+        sleep 1
+      done
+    resources:
+      requests:
+        cpu: 50m
+        memory: 50Mi
+      limits:
+        cpu: 100m
+        memory: 100Mi
 
 lapi:
   enabled: true
