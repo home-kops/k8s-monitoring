@@ -8,6 +8,8 @@ tls:
 agent:
   isDeployment: true
   replicas: 3
+  lapiURL: "http://crowdsec-service:8080"
+  lapiHost: "crowdsec-service"
   affinity:
     podAntiAffinity:
       requiredDuringSchedulingIgnoredDuringExecution:
