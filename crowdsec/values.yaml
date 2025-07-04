@@ -8,13 +8,6 @@ config:
         unregister_on_exit: true
 
 agent:
-  persistentVolume:
-    config:
-      enabled: true
-      accessModes:
-      - ReadWriteOnce
-      storageClassName: nfs-sc
-      size: 100Mi
   tolerations:
   - key: "role"
     operator: "Equal"
