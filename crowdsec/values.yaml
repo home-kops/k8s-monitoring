@@ -7,6 +7,7 @@ tls:
       namespaces: ["network"]
 agent:
   isDeployment: true
+  lapiUrl: "http://crowdsec-service:8080"
   lapiHost: "crowdsec-service"
   lapiPort: 8080
   replicas: 3
