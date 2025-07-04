@@ -2,7 +2,7 @@
 container_runtime: containerd
 
 config:
-  config.yaml.local: |
+  agent_config.local.yaml: |
     api:
       client:
         unregister_on_exit: true
