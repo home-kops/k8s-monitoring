@@ -1,10 +1,12 @@
 # for raw logs format: json or cri (docker|containerd)
 container_runtime: containerd
-# tls:
-#   enabled: true
-#   bouncer:
-#     reflector:
-#       namespaces: ["network"]
+
+config:
+  config.yaml.local: |
+    api:
+      client:
+        unregister_on_exit: true
+
 agent:
   persistentVolume:
     config:
