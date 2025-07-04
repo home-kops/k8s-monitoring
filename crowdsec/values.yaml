@@ -6,18 +6,13 @@ container_runtime: containerd
 #     reflector:
 #       namespaces: ["network"]
 agent:
-  isDeployment: true
-  lapiURL: "http://crowdsec-service:8080"
-  lapiHost: "crowdsec-service"
-  lapiPort: 8080
-  replicas: 3
-  affinity:
-    podAntiAffinity:
-      requiredDuringSchedulingIgnoredDuringExecution:
-      - labelSelector:
-          matchLabels:
-            app.kubernetes.io/name: crowdsec-agent
-        topologyKey: "kubernetes.io/hostname"
+  persistentVolume:
+    config:
+      enabled: true
+      accessModes:
+      - ReadWriteOnce
+      storageClassName: nfs-sc
+      size: 100Mi
   tolerations:
   - key: "role"
     operator: "Equal"
