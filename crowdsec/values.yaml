@@ -1,10 +1,10 @@
 # for raw logs format: json or cri (docker|containerd)
 container_runtime: containerd
-tls:
-  enabled: true
-  bouncer:
-    reflector:
-      namespaces: ["network"]
+# tls:
+#   enabled: true
+#   bouncer:
+#     reflector:
+#       namespaces: ["network"]
 agent:
   isDeployment: true
   lapiURL: "http://crowdsec-service:8080"
