@@ -11,7 +11,7 @@ agent:
       enabled: true
       accessModes:
       - ReadWriteOnce
-      storageClassName: local-path
+      storageClassName: nfs-sc
       size: 100Mi
   tolerations:
   - key: "role"
