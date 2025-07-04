@@ -1,12 +1,5 @@
 # for raw logs format: json or cri (docker|containerd)
 container_runtime: containerd
-
-config:
-  agent_config.local.yaml: |
-    api:
-      client:
-        unregister_on_exit: true
-
 agent:
   tolerations:
   - key: "role"
@@ -31,6 +24,8 @@ agent:
   env:
   - name: COLLECTIONS
     value: "crowdsecurity/traefik"
+  - name: UNREGISTER_ON_EXIT
+    value: "true"
 
 lapi:
   enabled: true
