@@ -6,6 +6,15 @@ tls:
     reflector:
       namespaces: ["network"]
 agent:
+  isDeployment: true
+  replicas: 3
+  affinity:
+    podAntiAffinity:
+      requiredDuringSchedulingIgnoredDuringExecution:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: crowdsec-agent
+        topologyKey: "kubernetes.io/hostname"
   tolerations:
   - key: "role"
     operator: "Equal"
