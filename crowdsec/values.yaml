@@ -31,9 +31,7 @@ lapi:
   enabled: true
   persistentVolume:
     data:
-      enabled: true
-      storageClassName: nfs-sc
-      size: 1Gi
+      enabled: false
   resources:
     requests:
       cpu: 100m
