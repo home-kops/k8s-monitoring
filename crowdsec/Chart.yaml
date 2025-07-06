@@ -1,0 +1,10 @@
+apiVersion: v2
+name: crowdsec
+description: Mod chart for crowdsec with AVP support
+type: application
+version: 0.1.0
+
+dependencies:
+- name: crowdsec
+  version: 0.19.4
+  repository: https://crowdsecurity.github.io/helm-charts
