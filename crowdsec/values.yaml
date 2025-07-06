@@ -27,6 +27,8 @@ crowdsec:
       value: "crowdsecurity/traefik"
     - name: UNREGISTER_ON_EXIT
       value: "true"
+    - name: DISABLE_PARSERS
+      value: "crowdsecurity/whitelists"
 
   lapi:
     enabled: true
