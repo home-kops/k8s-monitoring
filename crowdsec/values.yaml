@@ -1,46 +1,47 @@
-# for raw logs format: json or cri (docker|containerd)
-container_runtime: containerd
-agent:
-  tolerations:
-  - key: "role"
-    operator: "Equal"
-    value: "cp"
-    effect: "NoSchedule"
-  # Specify each pod whose logs you want to process
-  acquisition:
-  # The namespace where the pod is located
-  - namespace: network
-    # The pod name
-    podName: traefik-*
-    # as in crowdsec configuration, we need to specify the program name to find a matching parser
-    program: traefik
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 200m
-      memory: 512Mi
-  env:
-  - name: COLLECTIONS
-    value: "crowdsecurity/traefik"
-  - name: UNREGISTER_ON_EXIT
-    value: "true"
+crowdsec:
+  # for raw logs format: json or cri (docker|containerd)
+  container_runtime: containerd
+  agent:
+    tolerations:
+    - key: "role"
+      operator: "Equal"
+      value: "cp"
+      effect: "NoSchedule"
+    # Specify each pod whose logs you want to process
+    acquisition:
+    # The namespace where the pod is located
+    - namespace: network
+      # The pod name
+      podName: traefik-*
+      # as in crowdsec configuration, we need to specify the program name to find a matching parser
+      program: traefik
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 200m
+        memory: 512Mi
+    env:
+    - name: COLLECTIONS
+      value: "crowdsecurity/traefik"
+    - name: UNREGISTER_ON_EXIT
+      value: "true"
 
-lapi:
-  enabled: true
-  persistentVolume:
-    data:
-      enabled: false
-  resources:
-    requests:
-      cpu: 100m
-      memory: 256Mi
-    limits:
-      cpu: 300m
-      memory: 512Mi
-  nodeSelector:
-    size: m
-  env:
-  - name: BOUNCER_KEY_traefik
-    value: <path:secret/data/monitoring/crowdsec#traefik_bouncer_key>
+  lapi:
+    enabled: true
+    persistentVolume:
+      data:
+        enabled: false
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 300m
+        memory: 512Mi
+    nodeSelector:
+      size: m
+    env:
+    - name: BOUNCER_KEY_traefik
+      value: <path:secret/data/monitoring/crowdsec#traefik_bouncer_key>
