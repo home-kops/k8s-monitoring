@@ -1,0 +1,12 @@
+name: Validate Kubernetes Manifests
+
+on:
+  pull_request:
+
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-k8s-manifests:
+    uses: home-kops/actions/.github/workflows/validate-k8s-manifests.yaml@main
