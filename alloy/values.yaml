@@ -1,70 +1,69 @@
 alloy:
-  alloy:
-    configMap:
-      content: |-
-        livedebugging {
-          enabled = true
+  configMap:
+    content: |-
+      livedebugging {
+        enabled = true
+      }
+
+      logging {
+        level  = "info"
+        format = "logfmt"
+      }
+
+      prometheus.remote_write "default" {
+        endpoint {
+          url = "http://prometheus-server/api/v1/write"
         }
+      }
 
-        logging {
-          level  = "info"
-          format = "logfmt"
+      loki.write "default" {
+        endpoint {
+          url       = "http://loki:3100/loki/api/v1/push"
+          tenant_id = "alloy"
         }
+      }
 
-        prometheus.remote_write "default" {
-          endpoint {
-            url = "http://prometheus-server/api/v1/write"
-          }
-        }
+      prometheus.scrape "traefik" {
+        targets      = [
+          {"__address__" = "traefik.network:80", "instance" = "traefik"},
+        ]
+        forward_to   = [prometheus.remote_write.default.receiver]
+        metrics_path = "/api"
+      }
 
-        loki.write "default" {
-          endpoint {
-            url       = "http://loki:3100/loki/api/v1/push"
-            tenant_id = "alloy"
-          }
-        }
+      prometheus.scrape "crowdsec" {
+        targets      = [
+          {"__address__" = "crowdsec-agent-service:6060", "job" = "crowdsec-agent", "component" = "agent"},
+          {"__address__" = "crowdsec-service:6060", "job" = "crowdsec-lapi", "component" = "lapi"},
+        ]
+        forward_to   = [prometheus.remote_write.default.receiver]
+        metrics_path = "/metrics"
+      }
+  mounts:
+    extra:
+    - name: traefik-logs
+      mountPath: /var/log/traefik
 
-        prometheus.scrape "traefik" {
-          targets      = [
-            {"__address__" = "traefik.network:80", "instance" = "traefik"},
-          ]
-          forward_to   = [prometheus.remote_write.default.receiver]
-          metrics_path = "/api"
-        }
+controller:
+  volumes:
+    extra:
+    - name: traefik-logs
+      hostPath:
+        path: /var/log/traefik
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 300m
+      memory: 512Mi
+  nodeSelector:
+    size: m
 
-        prometheus.scrape "crowdsec" {
-          targets      = [
-            {"__address__" = "crowdsec-agent-service:6060", "job" = "crowdsec-agent", "component" = "agent"},
-            {"__address__" = "crowdsec-service:6060", "job" = "crowdsec-lapi", "component" = "lapi"},
-          ]
-          forward_to   = [prometheus.remote_write.default.receiver]
-          metrics_path = "/metrics"
-        }
-    mounts:
-      extra:
-      - name: traefik-logs
-        mountPath: /var/log/traefik
-
-  controller:
-    volumes:
-      extra:
-      - name: traefik-logs
-        hostPath:
-          path: /var/log/traefik
-    resources:
-      requests:
-        cpu: 100m
-        memory: 256Mi
-      limits:
-        cpu: 300m
-        memory: 512Mi
-    nodeSelector:
-      size: m
-
-  ingress:
-    enabled: true
-    ingressClassName: traefik
-    annotations:
-      traefik.ingress.kubernetes.io/router.entrypoints: websecure
-    hosts:
-    - alloy.<path:secret/data/infra#domain>
+ingress:
+  enabled: true
+  ingressClassName: traefik
+  annotations:
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+  hosts:
+  - alloy.<path:secret/data/infra#domain>
